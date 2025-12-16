@@ -30,3 +30,15 @@ class orderStatus(models.Model)
 
     def __str__(self):
         return self.name
+
+class order(models.Model)
+
+
+    status = models.ForeignKey(
+        orderStatus,
+        on_delete=models.SET_NULL,
+        null=True
+    )
+
+    def __str__(self):
+        return f"order {self.id}"
