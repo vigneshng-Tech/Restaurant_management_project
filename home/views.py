@@ -1,27 +1,13 @@
-from django.shortcuts import render
+from rest_framework.generics import ListAPIView, RetrieveAPIView
+from rest_framework.response import response
+from .models import MenuCategory, MenuItem
+from .serializers import MenuCategorySerializer, IngredientSerializer
 
-# Create your views here.
-from rest_framework.generics import ListAPIView
-from .models import MenuCategorySerializer
+class MenuItemIngredientsView(RetrieveAPIView):
+    queryset = MenuItem.objects.all()
 
-
-class MenuCategoryListView(ListAPIView):
-    class Meta:
-        model = MenuCategory
-        fields = ['name']
-
-from rest_framework.generics import ListAPIView
-from .models import MenuCategory
-from .serializers import MenuCategorySerializer
-
-class MenuCategoryListView(ListAPIView):
-    queryset = MenuCategory.objects.all()
-    serilaizer_class = MenuCategorySerializer
-
-
-from django.urls import path
-from .views import MenuCategoryListView
-
-urlpatterns = [
-    path('menu-Catergories/', MenuCategoryListView.as_view(), name='menu-categories'),
-]
+    def retrieve(self, request, *args, **kwargs):
+        menu_item = self.get_object()
+        ingredients =menu_item.ingredients.all()
+        serializer = IngredientSerializer(ingredients, many=True)
+        return Response(serializer.data)
