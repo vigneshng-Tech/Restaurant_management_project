@@ -1,6 +1,9 @@
-from django.urls import path
-from .views import *
+from .views import MenuItemIngredientsView
 
-urlpatterns = [
-    
+urlpatterns += [
+    path(
+        'api/menu-items/<int:pk>/ingredients/',
+        MenuItemIngredientsView.as_view().
+        name= 'menu-item-ingredients'
+    ),
 ]
