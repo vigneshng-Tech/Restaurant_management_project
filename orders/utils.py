@@ -1,6 +1,9 @@
 import string
 import secrets
 from orders.models import Coupon 
+from datetime import datetime, time
+from django.db.models import Sum
+from .models import Order
 
 
 def generate_coupon_code(length=10):
@@ -12,7 +15,7 @@ def generate_coupon_code(length=10):
         if not Coupon.objects.filter(code=code).exists():
             return code
 
-def calculate_tip_amount(order_total * tip_percentage):
+def calculate_tip_amount(order_total, tip_percentage):
     """
     Calculate tip amount based on order total and tip percentage.
 
@@ -25,10 +28,10 @@ def calculate_tip_amount(order_total * tip_percentage):
     tip_amount = order_total * (tip_percentage /100)
     return round(tip_amount, 2)
 
-from django.db.models import sum
-from .models import order
+from django.db.models import Sum
+from .models import Order
 
 def get_daily_sales_total(date):
     orders = Order.objects.filter(created_at__date=date)
-    to = orders.aggregate(total_sum=Sum('total_price'))['total_sum']
+    total = orders.aggregate(total_sum=Sum('total_price'))['total_sum']
     return total if total else 0
