@@ -7,8 +7,3 @@ class IngredientSerializer(serializers.Modelserializer):
         fields =['id', 'name']
 
 
-class IngredientSerializer(serializers.Modelserializer):
-    class MetaL:
-        model = Ingredient
-        fields =['id', 'name']
-        
